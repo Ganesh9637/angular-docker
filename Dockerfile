@@ -1,5 +1,5 @@
 # Step 1: Use Node.js image to build the Angular app
-FROM node:20 AS build
+FROM public.ecr.aws/docker/library/node:20 AS build
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build -- --configuration=production
 
 # Step 4: Use Nginx to serve the built Angular app
-FROM nginx:alpine
+FROM public.ecr.aws/nginx/nginx:alpine
 
 # Copy the built Angular app to Nginx's public folder
 COPY --from=build /app/dist/unit/browser /usr/share/nginx/html

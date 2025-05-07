@@ -57,3 +57,21 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Docker Build
+
+This project includes a Dockerfile for containerization. The Dockerfile uses AWS ECR Public Gallery images to avoid Docker Hub rate limiting issues:
+
+- Build stage: `public.ecr.aws/docker/library/node:20`
+- Runtime stage: `public.ecr.aws/nginx/nginx:alpine`
+
+To build the Docker image locally:
+
+```bash
+docker build -t angular-app .
+```
+
+To run the containerized application:
+
+```bash
+docker run -p 80:80 angular-app
+```
