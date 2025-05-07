@@ -7,8 +7,8 @@ REGION="us-east-1"  # Change to your preferred region
 STACK_NAME="${ENVIRONMENT_NAME}-angular-infra"
 CICD_STACK_NAME="${ENVIRONMENT_NAME}-angular-cicd"
 ECR_REPOSITORY_NAME="angular-realworld-app"
-GITHUB_OWNER=""  # Fill in your GitHub username
-GITHUB_REPO="angular-realworld-example-app"
+GITHUB_OWNER="Ganesh9637"  # Fill in your GitHub username
+GITHUB_REPO="angular-docker"
 GITHUB_BRANCH="main"  # Change to your branch name
 GITHUB_TOKEN=""  # Fill in your GitHub token
 
