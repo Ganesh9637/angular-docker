@@ -79,6 +79,12 @@ Resources:
                   - s3:PutObject
                   - s3:GetObjectVersion
                 Resource: !Sub ${ArtifactBucket.Arn}/*
+              - Effect: Allow
+                Action:
+                  - ecs:DescribeTaskDefinition
+                  - ecs:ListTaskDefinitions
+                  - cloudformation:DescribeStacks
+                Resource: '*'
 
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
