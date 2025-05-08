@@ -8,7 +8,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # Step 3: Copy the Angular app source code and build it
-COPY . . 
+COPY . .
 RUN npm run build -- --configuration=production
 
 # Step 4: Use Nginx to serve the built Angular app
@@ -16,6 +16,7 @@ FROM public.ecr.aws/nginx/nginx:alpine
 
 # Copy the built Angular app to Nginx's public folder
 COPY --from=build /app/dist/unit/browser /usr/share/nginx/html
+
 
 # Expose port 80 (Nginx default port)
 EXPOSE 80
