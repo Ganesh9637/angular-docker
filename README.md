@@ -60,6 +60,17 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Code Quality with SonarQube
+
+This project includes SonarQube integration for code quality analysis. To run SonarQube analysis locally:
+
+```bash
+npm run sonar
+```
+
+For detailed instructions on setting up SonarQube with the CI/CD pipeline, see [SONARQUBE_SETUP.md](SONARQUBE_SETUP.md).
+
 ## Docker Build
 
 This project includes a Dockerfile for containerization. The Dockerfile uses AWS ECR Public Gallery images to avoid Docker Hub rate limiting issues:

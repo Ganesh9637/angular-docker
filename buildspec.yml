@@ -3,8 +3,18 @@ version: 0.2
 env:
   variables:
     ENVIRONMENT_NAME: dev
+  parameter-store:
+    SONAR_HOST_URL: /sonar/host-url
+    SONAR_TOKEN: /sonar/token
 
 phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - npm install
+      - npm install -g sonarqube-scanner
+
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
@@ -12,10 +22,17 @@ phases:
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
+      # Run tests and generate coverage report
+      - echo Running tests and generating coverage report...
+      - npm test -- --code-coverage --watch=false --browsers=ChromeHeadless
 
   build:
     commands:
       - echo Build started on `date`
+      # Run SonarQube analysis
+      - echo Running SonarQube analysis...
+      - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=angular-app -Dsonar.projectName="Angular Application" -Dsonar.projectVersion=$COMMIT_HASH
+      # Build Docker image
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
@@ -29,7 +46,6 @@ phases:
       - echo Writing image definitions file...
       - aws ecs describe-task-definition --task-definition $(aws cloudformation describe-stacks --stack-name ${ENVIRONMENT_NAME}-angular-infra --query "Stacks[0].Outputs[?OutputKey=='TaskDefinition'].OutputValue" --output text) --query taskDefinition > taskdef.json
       - echo '[{"name":"angular-app","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imagedefinitions.json
-
 
 artifacts:
   files:
