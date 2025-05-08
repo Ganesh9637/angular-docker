@@ -17,6 +17,8 @@ FROM public.ecr.aws/nginx/nginx:alpine
 # Copy the built Angular app to Nginx's public folder
 COPY --from=build /app/dist/unit/browser /usr/share/nginx/html
 
+RUN --from=build cat /app/dist/unit/browser
+
 
 # Expose port 80 (Nginx default port)
 EXPOSE 80
